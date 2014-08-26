@@ -72,11 +72,11 @@ Let's imagine that you create a laravel configuration file at `app/config/myapp.
 
 Simple as that...
 
-If you are creating packages, it might be helpful to look for a configuration file in the app/config folder and provide a backup location. Perhaps you package comes with its own configuration file...
+If you are creating packages, it might be helpful to look for a configuration file in the `app/config` folder and provide a backup location. Perhaps your package comes with its own configuration file...
 
-	$config = $app['config']->has("myapp")
-            ? $app['config']->get("myapp")
-            : $app['config']->get("myapp::config");
+	$config = $app['config']->has("myapp") //=> Check if app/config/myapp.php exists
+            ? $app['config']->get("myapp") //=> then fetch it
+            : $app['config']->get("myapp::config"); //=> or else fetch the package configuration file
 
 ## Usage ##
 
@@ -96,3 +96,4 @@ If you are creating packages, it might be helpful to look for a configuration fi
 
     $this->configurator->set('my_setting', 'some new value');
 
+And that's all there is to it...
