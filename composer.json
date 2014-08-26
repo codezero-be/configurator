@@ -1,6 +1,6 @@
 {
     "name": "codezero/configurator",
-    "description": "",
+    "description": "Inject configuration data into your classes",
     "keywords": [
         "config",
         "configurator",
