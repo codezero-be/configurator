@@ -97,3 +97,6 @@ If you are creating packages, it might be helpful to look for a configuration fi
     $this->configurator->set('my_setting', 'some new value');
 
 And that's all there is to it...
+
+---
+[![Analytics](https://ga-beacon.appspot.com/UA-58876018-1/codezero-be/configurator)](https://github.com/igrigorik/ga-beacon)
