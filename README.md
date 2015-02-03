@@ -8,47 +8,82 @@
 This package allows you to easily inject configuration files into you own classes.
 
 - [Installation](#installation)
-- [Manual Setup](#manual-setup)
-- [Laravel 4 Setup](#laravel-4-setup)
 - [Usage](#usage)
+- [Laravel 4 Setup](#laravel-4-setup)
 
 ## Installation ##
 
 Download this package or install it through Composer:
 
     "require": {
-    	"codezero/configurator": "2.*"
+    	"codezero/configurator": "3.*"
     }
 
-## Manual Setup ##
+## Usage ##
 
-### Create a configuration file ###
+### Define a configuration ###
 
-Simply create a PHP file anywhere you like, that looks like this:
+Specify an array...
 
-	<?php
-	return [
-	    'my_setting' => 'some value',
-	    'my_other_setting' => 'some other value'
-	];
+    $config = [
+        'my_setting' => 'some value',
+        'my_other_setting' => 'some other value'
+    ];
 
-You can put any key/value pairs in this array. Whatever is needed for your class.
+Or refer to a configuration file...
 
-### Instantiate Configurator ###
+    $config = '/path/to/configFile.php';
 
-Create an instance of the `Configurator`, to inject into your own class:
+That configuration file could look like this:
+
+    <?php
+    return [
+        'my_setting' => 'some value',
+        'my_other_setting' => 'some other value'
+    ];
+
+### Use `Configurator` in your class ###
+
+Inject a `Configurator` implementation in your class. If none is supplied, the default one will be instantiated. The `$configurator->load()` method will return a `Configuration` object or throw a `ConfigurationException` if no valid array could be loaded.
 
     use CodeZero\Configurator\Configurator;
+    use CodeZero\Configurator\DefaultConfigurator;
 
-    $config = '/path/to/your/configFile.php';
+    class MyClass {
 
-    $configurator = new Configurator($config);
+        private $config;
+
+        public function __construct($config, Configurator $configurator = null)
+        {
+	        $configurator = $configurator ?: new DefaultConfigurator();
+            $this->config = $configurator->load($config);
+        }
+    }
+
+### Instantiate your class ###
+
+Create an instance of your class, passing it the [configuration array or file](#define-a-configuration):
+
+    $myClass = new MyClass($config);
+
+### Use the `Configuration` in your class ###
+
+Get configuration values:
+
+    $mySetting = $this->config->get('my_setting');
+    $myOtherSetting = $this->config->get('my_other_setting');
+
+Set configuration values at runtime:
+
+    $this->config->set('my_setting', 'some new value');
+
+And that's all there is to it...
 
 ## Laravel 4 Setup ##
 
 ### IoC binding ###
 
-If you use Laravel, then you can setup a binding that resolves the `Configurator` class and its dependencies. Let's say you have a class `Acme\MyApp\MyClass` that needs a configurator:
+If you use Laravel, then you can setup a binding that resolves your class with its configuration automatically. Let's say you have a class `Acme\MyApp\MyClass`:
 
 	App::bind('Acme\MyApp\MyClass', function($app)
     {
@@ -61,15 +96,13 @@ If you use Laravel, then you can setup a binding that resolves the `Configurator
 		// Or refer to a configuration file...
 		$config = '/path/to/configFile.php';
 
-        $configurator = new \CodeZero\Configurator\Configurator($config);
-
-        return new \Acme\MyApp\MyClass($configurator);
+        return new \Acme\MyApp\MyClass($config);
     });
 
-### Provide configuration data ###
+### Use Laravel's `Config` infrastructure ###
 
-What if you don't want to hardcode an array or a file path in your bindings, but instead you want to make use of laravels `Config` infrastructure?
-Let's imagine that you create a laravel configuration file at `app/config/myapp.php`.
+What if you don't want to hardcode an array or a file path in your bindings, but instead you want to make use of laravel's `Config` infrastructure?
+Let's imagine that you create a Laravel configuration file at `app/config/myapp.php`. You could then use this in your binding:
 
 	$config = $app['config']->get("myapp");
 
@@ -77,34 +110,11 @@ Simple as that...
 
 If you are creating packages, it might be helpful to look for a configuration file in the `app/config` folder and provide a backup location. Perhaps your package comes with its own configuration file...
 
-	$config = $app['config']->has("myapp") //=> Check if app/config/myapp.php exists
-            ? $app['config']->get("myapp") //=> then fetch it
-            : $app['config']->get("myapp::config"); //=> or else fetch the package configuration file
+	$config = $app['config']->has("myapp")
+            ? $app['config']->get("myapp")
+            : $app['config']->get("myapp::config");
 
-## Usage ##
-
-### Inject the Configurator into your class ###
-
-    use CodeZero\Configurator\Configurator;
-
-    class MyClass {
-
-        public function __construct(Configurator $configurator)
-        {
-	        $this->configurator = $configurator;
-        }
-    }
-
-### Get configuration values ###
-
-    $mySetting = $this->configurator->get('my_setting');
-    $myOtherSetting = $this->configurator->get('my_other_setting');
-
-### Set configuration values at runtime ###
-
-    $this->configurator->set('my_setting', 'some new value');
-
-And that's all there is to it...
+> This will check if app/config/myapp.php exists and then fetch it, or else it will try and fetch the package configuration file.
 
 ---
 [![Analytics](https://ga-beacon.appspot.com/UA-58876018-1/codezero-be/configurator)](https://github.com/igrigorik/ga-beacon)

@@ -1,6 +1,6 @@
-<?php namespace CodeZero\Configurator; 
+<?php namespace CodeZero\Configurator;
 
-class Loader {
+class DefaultConfigurator implements Configurator {
 
     /**
      * Load configuration from a file or array
@@ -8,9 +8,9 @@ class Loader {
      * @param string|array $config
      *
      * @throws ConfigurationException
-     * @return array
+     * @return Configuration
      */
-    public function loadConfiguration($config)
+    public function load($config)
     {
         if (is_string($config) and file_exists($config))
         {
@@ -24,7 +24,7 @@ class Loader {
             throw new ConfigurationException($msg);
         }
 
-        return $config;
+        return new Configuration($config);
     }
 
-}
+} 
