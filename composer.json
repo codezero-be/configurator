@@ -23,8 +23,8 @@
         "phpspec/phpspec": "~2.0"
     },
     "autoload": {
-        "psr-0": {
-            "CodeZero\\Configurator": "src/"
+        "psr-4": {
+            "CodeZero\\Configurator\\": "src/"
         }
     },
     "minimum-stability": "stable"
