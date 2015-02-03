@@ -38,10 +38,11 @@ You can put any key/value pairs in this array. Whatever is needed for your class
 
 Create an instance of the `Configurator`, to inject into your own class:
 
-	$loader = new \CodeZero\Configurator\Loader();
+    use CodeZero\Configurator\Configurator;
+
     $config = '/path/to/your/configFile.php';
 
-    $configurator = new \CodeZero\Configurator\Configurator($loader, $config);
+    $configurator = new Configurator($config);
 
 ## Laravel 4 Setup ##
 
@@ -52,13 +53,15 @@ If you use Laravel, then you can setup a binding that resolves the `Configurator
 	App::bind('Acme\MyApp\MyClass', function($app)
     {
 		// Specify an array...
-        $config = ['my_setting' => 'some value', 'my_other_setting' => 'some other value'];
+        $config = [
+            'my_setting' => 'some value',
+            'my_other_setting' => 'some other value'
+        ];
 
 		// Or refer to a configuration file...
 		$config = '/path/to/configFile.php';
 
-        $loader = new \CodeZero\Configurator\Loader();
-        $configurator = new \CodeZero\Configurator\Configurator($loader, $config);
+        $configurator = new \CodeZero\Configurator\Configurator($config);
 
         return new \Acme\MyApp\MyClass($configurator);
     });
@@ -82,9 +85,14 @@ If you are creating packages, it might be helpful to look for a configuration fi
 
 ### Inject the Configurator into your class ###
 
-    public function __construct(\CodeZero\Configurator\Configurator $configurator)
-    {
-		$this->configurator = $configurator;
+    use CodeZero\Configurator\Configurator;
+
+    class MyClass {
+
+        public function __construct(Configurator $configurator)
+        {
+	        $this->configurator = $configurator;
+        }
     }
 
 ### Get configuration values ###
