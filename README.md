@@ -17,7 +17,7 @@ This package allows you to easily inject configuration files into you own classe
 Download this package or install it through Composer:
 
     "require": {
-    	"codezero/configurator": "1.*"
+    	"codezero/configurator": "2.*"
     }
 
 ## Manual Setup ##
