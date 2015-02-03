@@ -8,11 +8,17 @@ class ConfiguratorSpec extends ObjectBehavior {
 
     function let(Loader $loader)
     {
-        $this->beConstructedWith($loader, ['set1' => 'val1', 'set2' => 'val2']);
+        $this->beConstructedWith(['set1' => 'val1', 'set2' => 'val2'], $loader);
     }
 
     function it_is_initializable()
     {
+        $this->shouldHaveType('CodeZero\Configurator\Configurator');
+    }
+
+    function it_is_initializable_without_loader_constructor_argument()
+    {
+        $this->beConstructedWith(['set1' => 'val1', 'set2' => 'val2']);
         $this->shouldHaveType('CodeZero\Configurator\Configurator');
     }
 

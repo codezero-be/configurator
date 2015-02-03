@@ -12,11 +12,12 @@ class Configurator {
     /**
      * Constructor
      *
-     * @param Loader $loader
      * @param string|array $config
+     * @param Loader $loader
      */
-    public function __construct(Loader $loader, $config)
+    public function __construct($config, Loader $loader = null)
     {
+        $loader = $loader ?: new Loader();
         $this->config = $loader->loadConfiguration($config);
     }
 
