@@ -79,7 +79,7 @@ Set configuration values at runtime:
 
 And that's all there is to it...
 
-## Laravel 4 Setup ##
+## Laravel 5 Usage ##
 
 ### IoC binding ###
 
@@ -102,19 +102,11 @@ If you use Laravel, then you can setup a binding that resolves your class with i
 ### Use Laravel's `Config` infrastructure ###
 
 What if you don't want to hardcode an array or a file path in your bindings, but instead you want to make use of laravel's `Config` infrastructure?
-Let's imagine that you create a Laravel configuration file at `app/config/myapp.php`. You could then use this in your binding:
+Let's imagine that you create a Laravel configuration file at `config/myapp.php`. You could then use this in your binding:
 
 	$config = $app['config']->get("myapp");
 
 Simple as that...
-
-If you are creating packages, it might be helpful to look for a configuration file in the `app/config` folder and provide a backup location. Perhaps your package comes with its own configuration file...
-
-	$config = $app['config']->has("myapp")
-            ? $app['config']->get("myapp")
-            : $app['config']->get("myapp::config");
-
-> This will check if app/config/myapp.php exists and then fetch it, or else it will try and fetch the package configuration file.
 
 ---
 [![Analytics](https://ga-beacon.appspot.com/UA-58876018-1/codezero-be/configurator)](https://github.com/igrigorik/ga-beacon)
